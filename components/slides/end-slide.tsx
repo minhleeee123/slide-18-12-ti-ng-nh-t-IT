@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface EndSlideProps {
   slide: {
     message: string
@@ -5,8 +10,33 @@ interface EndSlideProps {
 }
 
 export function EndSlide({ slide }: EndSlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const messageRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(messageRef.current, {
+        opacity: 0,
+        scale: 0.3,
+        duration: 1.2,
+        ease: "elastic.out(1, 0.5)"
+      })
+
+      gsap.to(messageRef.current, {
+        scale: 1.05,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="relative text-center">
+    <div ref={containerRef} className="relative text-center">
       {/* Celebration decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl animate-pulse"></div>
@@ -25,7 +55,7 @@ export function EndSlide({ slide }: EndSlideProps) {
         </svg>
       </div>
       
-      <h1 className="text-7xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent relative z-10 animate-pulse">{slide.message}</h1>
+      <h1 ref={messageRef} className="text-6xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent relative z-10">{slide.message}</h1>
     </div>
   )
 }

@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface TableSlideProps {
   slide: {
     title: string
@@ -11,8 +16,45 @@ interface TableSlideProps {
 }
 
 export function TableSlide({ slide }: TableSlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const tableRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        y: -30,
+        duration: 0.8,
+        ease: "power3.out"
+      })
+
+      gsap.from(tableRef.current, {
+        opacity: 0,
+        y: 50,
+        duration: 0.8,
+        ease: "back.out(1.5)",
+        delay: 0.3
+      })
+
+      if (tableRef.current?.querySelector("tbody")) {
+        const rows = tableRef.current.querySelectorAll("tbody tr")
+        gsap.from(rows, {
+          opacity: 0,
+          x: -30,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.6
+        })
+      }
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="relative space-y-8">
+    <div ref={containerRef} className="relative space-y-8">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none overflow-hidden">
         <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -22,8 +64,8 @@ export function TableSlide({ slide }: TableSlideProps) {
         </svg>
       </div>
       
-      <h2 className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12">{slide.title}</h2>
-      <div className="overflow-hidden rounded-xl border-2 border-primary/20 shadow-xl relative z-10">
+      <h2 ref={titleRef} className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12">{slide.title}</h2>
+      <div ref={tableRef} className="overflow-hidden rounded-xl border-2 border-primary/20 shadow-xl relative z-10">
         <table className="w-full">
           <thead className="bg-gradient-to-r from-primary via-accent to-primary text-primary-foreground">
             <tr>

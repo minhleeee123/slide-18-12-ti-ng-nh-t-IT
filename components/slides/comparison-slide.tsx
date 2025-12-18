@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface ComparisonSlideProps {
   slide: {
     title: string
@@ -7,16 +12,50 @@ interface ComparisonSlideProps {
 }
 
 export function ComparisonSlide({ slide }: ComparisonSlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const prosRef = useRef<HTMLDivElement>(null)
+  const consRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.8,
+        ease: "back.out(1.7)"
+      })
+
+      gsap.from(prosRef.current, {
+        opacity: 0,
+        x: -100,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.3
+      })
+
+      gsap.from(consRef.current, {
+        opacity: 0,
+        x: 100,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.3
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="relative space-y-8">
+    <div ref={containerRef} className="relative space-y-8">
       {/* VS decoration */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl font-black text-primary/5 pointer-events-none">
         VS
       </div>
       
-      <h2 className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12 relative z-10">{slide.title}</h2>
+      <h2 ref={titleRef} className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12 relative z-10">{slide.title}</h2>
       <div className="grid grid-cols-2 gap-12 relative z-10">
-        <div className="space-y-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 p-8 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
+        <div ref={prosRef} className="space-y-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 p-8 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-800">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-xl">
               <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -34,7 +73,7 @@ export function ComparisonSlide({ slide }: ComparisonSlideProps) {
             ))}
           </ul>
         </div>
-        <div className="space-y-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 p-8 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-800">
+        <div ref={consRef} className="space-y-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 p-8 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-800">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-red-500 to-orange-500 p-3 rounded-xl">
               <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

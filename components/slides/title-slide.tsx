@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface TitleSlideProps {
   slide: {
     title: string
@@ -7,8 +12,40 @@ interface TitleSlideProps {
 }
 
 export function TitleSlide({ slide }: TitleSlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline()
+      
+      tl.from(titleRef.current, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 1,
+        ease: "elastic.out(1, 0.5)"
+      })
+      .from(subtitleRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.6,
+        ease: "power2.out"
+      }, "-=0.3")
+      .from(footerRef.current, {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        ease: "power2.out"
+      }, "-=0.2")
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="relative text-center space-y-8">
+    <div ref={containerRef} className="relative text-center space-y-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
@@ -24,10 +61,10 @@ export function TitleSlide({ slide }: TitleSlideProps) {
       </div>
       
       <div className="relative z-10">
-        <h1 className="text-7xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-4">{slide.title}</h1>
-        {slide.subtitle && <p className="text-3xl text-muted-foreground">{slide.subtitle}</p>}
+        <h1 ref={titleRef} className="text-7xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-4">{slide.title}</h1>
+        {slide.subtitle && <p ref={subtitleRef} className="text-3xl text-muted-foreground">{slide.subtitle}</p>}
         {slide.footer && (
-          <div className="mt-16 pt-8 border-t border-border">
+          <div ref={footerRef} className="mt-16 pt-8 border-t border-border">
             <div className="text-xl text-foreground space-y-2">
               {slide.footer.split("\n").map((line, i) => (
                 <p key={i}>{line}</p>

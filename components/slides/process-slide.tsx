@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface ProcessSlideProps {
   slide: {
     title: string
@@ -6,6 +11,35 @@ interface ProcessSlideProps {
 }
 
 export function ProcessSlide({ slide }: ProcessSlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const stepsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        y: -30,
+        duration: 0.8,
+        ease: "power3.out"
+      })
+
+      if (stepsRef.current) {
+        gsap.from(stepsRef.current.children, {
+          opacity: 0,
+          scale: 0.8,
+          y: 50,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "back.out(1.5)",
+          delay: 0.3
+        })
+      }
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   const icons = [
     <svg key="1" className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
     <svg key="2" className="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>,
@@ -14,12 +48,9 @@ export function ProcessSlide({ slide }: ProcessSlideProps) {
   ];
   
   return (
-    <div className="relative space-y-8">
-      {/* Connecting lines decoration */}
-      <div className="absolute top-40 left-1/2 transform -translate-x-1/2 w-1 h-96 bg-gradient-to-b from-primary via-accent to-secondary opacity-20 pointer-events-none"></div>
-      
-      <h2 className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12">{slide.title}</h2>
-      <div className="grid grid-cols-2 gap-12">
+    <div ref={containerRef} className="relative space-y-8">
+      <h2 ref={titleRef} className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-12">{slide.title}</h2>
+      <div ref={stepsRef} className="grid grid-cols-2 gap-12">
         {slide.steps?.map((step, idx) => (
           <div key={idx} className="space-y-4 relative z-10">
             <div className="bg-gradient-to-br from-primary to-accent text-primary-foreground p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden group">

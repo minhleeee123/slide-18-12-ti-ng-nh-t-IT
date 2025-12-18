@@ -1,3 +1,8 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+
 interface QASlideProps {
   slide: {
     message: string
@@ -6,8 +11,42 @@ interface QASlideProps {
 }
 
 export function QASlide({ slide }: QASlideProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const messageRef = useRef<HTMLDivElement>(null)
+  const submessageRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(messageRef.current, {
+        opacity: 0,
+        rotationY: 180,
+        duration: 1,
+        ease: "back.out(1.7)"
+      })
+
+      gsap.from(submessageRef.current, {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.5
+      })
+
+      gsap.to(messageRef.current, {
+        y: -10,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="relative text-center space-y-8">
+    <div ref={containerRef} className="relative text-center space-y-8">
       {/* Q&A decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
@@ -29,10 +68,10 @@ export function QASlide({ slide }: QASlideProps) {
       </div>
       
       <div className="relative z-10">
-        <div className="inline-block bg-gradient-to-br from-primary to-accent p-6 rounded-3xl mb-8 shadow-2xl">
+        <div ref={messageRef} className="inline-block bg-gradient-to-br from-primary to-accent p-6 rounded-3xl mb-8 shadow-2xl">
           <h1 className="text-7xl font-bold text-white">{slide.message}</h1>
         </div>
-        <p className="text-4xl text-muted-foreground bg-muted/50 inline-block px-8 py-4 rounded-2xl">{slide.submessage}</p>
+        <p ref={submessageRef} className="text-4xl text-muted-foreground bg-muted/50 inline-block px-8 py-4 rounded-2xl">{slide.submessage}</p>
       </div>
     </div>
   )
