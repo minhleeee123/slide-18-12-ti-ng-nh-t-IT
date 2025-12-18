@@ -19,7 +19,6 @@ export function ContentSlide({ slide }: ContentSlideProps) {
       <ul className="space-y-6">
         {slide.items?.map((item: any, idx: number) => (
           <li key={idx} className="text-3xl text-foreground flex items-start gap-4">
-            <span className="text-accent font-bold">•</span>
             <span>
               {typeof item === "string" ? (
                 item
