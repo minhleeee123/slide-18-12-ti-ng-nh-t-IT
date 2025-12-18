@@ -9,7 +9,7 @@ export const slides = [
   {
     id: 2,
     type: "content",
-    title: "発表の流れ",
+    title: "発表",
     items: [
       { label: "1. 理由", person: "" },
       { label: "2. 言葉の意味", person: "" },
