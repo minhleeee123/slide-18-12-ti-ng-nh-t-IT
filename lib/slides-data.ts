@@ -3,8 +3,9 @@ export const slides = [
     id: 1,
     type: "title",
     title: "公開鍵暗号",
-    subtitle: "",
-    footer: "",
+    subtitle: "グループ２",
+    footer:
+      "Nguyễn Quý Quang Huy (グエン・クイ・クアン・フイ)\nLương Việt Hoàng (ルオン・ヴィエット・ホアン)\nPhùng Thị Ngọc Ánh (フン・ティ・ゴック・アイン)\nLê Quang Minh (レ・クアン・ミン)",
   },
   {
     id: 2,
@@ -36,7 +37,7 @@ export const slides = [
     type: "definition",
     title: "公開鍵暗号とは",
     content: {
-      main: "鍵が２つあります",
+      main: "鍵が２つある",
       keys: [
         { label: "🔑 公開鍵", desc: "みんなの鍵" },
         { label: "🗝️ 秘密鍵", desc: "自分だけの鍵" },

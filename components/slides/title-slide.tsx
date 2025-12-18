@@ -10,10 +10,16 @@ export function TitleSlide({ slide }: TitleSlideProps) {
   return (
     <div className="text-center space-y-8">
       <h1 className="text-7xl font-bold text-primary mb-4">{slide.title}</h1>
-      <p className="text-3xl text-muted-foreground">{slide.subtitle}</p>
-      <div className="mt-16 pt-8 border-t border-border">
-        <p className="text-2xl text-foreground">{slide.footer}</p>
-      </div>
+      {slide.subtitle && <p className="text-3xl text-muted-foreground">{slide.subtitle}</p>}
+      {slide.footer && (
+        <div className="mt-16 pt-8 border-t border-border">
+          <div className="text-xl text-foreground space-y-2">
+            {slide.footer.split("\n").map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
