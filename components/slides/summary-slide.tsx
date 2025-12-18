@@ -45,7 +45,7 @@ export function SummarySlide({ slide }: SummarySlideProps) {
               src={slide.image} 
               alt={slide.title}
               fill
-              className="object-contain p-4"
+              className="object-cover"
             />
           </div>
         </div>
