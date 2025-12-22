@@ -52,8 +52,8 @@ export const slides = [
     type: "process",
     title: "3. 仕組みと例",
     steps: [
-      { title: "ステップ 1：暗号化", desc: "使う鍵：公開鍵", sub: "誰でもロックできる" },
-      { title: "ステップ 2：復号", desc: "使う鍵：秘密鍵", sub: "本人だけが開ける" },
+      { title: "ステップ１：送信者がロックする", desc: "使う鍵：「公開鍵」", sub: "" },
+      { title: "ステップ２：受信者が開ける　", desc: "使う鍵：「秘密鍵」", sub: "" },
     ],
   },
   {
@@ -61,8 +61,8 @@ export const slides = [
     type: "example",
     title: "3. 仕組みと例",
     content: [
-      { emoji: "📮", label: "投入口", value: "公開鍵", desc: "手紙を入れる" },
-      { emoji: "🗝️", label: "ポストの鍵", value: "秘密鍵", desc: "手紙を取り出す" },
+      { emoji: "📮", label: "ポスト", value: "暗号化", desc: "手紙を入れるのは、誰でもできる" },
+      { emoji: "🗝️", label: "鍵を持つ人だけ", value: "復号", desc: "取り出せるのは、鍵を持つ人だけ" },
     ],
   },
   {
@@ -70,7 +70,7 @@ export const slides = [
     type: "comparison",
     title: "3. 仕組みと例",
     pros: ["管理が簡単", "安全性が高い"],
-    cons: ["計算が複雑", "処理が遅い"],
+    cons: ["計算が複雑", "処理が少し遅い"],
   },
   {
     id: 9,
